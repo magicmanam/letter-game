@@ -1,0 +1,11 @@
+[
+{ pattern: '*литка', letters: ['п', 'у'] },
+{ pattern: 'спас*тель', letters: ['а', 'и'] },
+{ pattern: '*ролик', letters: ['к', ''] },
+{ pattern: '*олен', letters: ['в', 'б'] },
+{ pattern: 'ист*рия', letters: ['и', 'е'] },
+{ pattern: '*здание', letters: ['и', ''] },
+{ pattern: 'спор*', letters: ['т', ''] },
+{ pattern: 'стр*на', letters: ['а', 'у'] },
+{ pattern: '*вечка', letters: ['о', 'с'] },
+{ pattern: 'б*тва', letters: ['о', 'и'] } ]
