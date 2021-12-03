@@ -28,7 +28,7 @@ pro.load.on('words-component.html', function (wordsContainer) {
                     let words = [];
 
                     letters.forEach((letter, i) => {
-                        words.push(pattern.replace('*', letters[i]);
+                        words.push(pattern.replace('*', letters[i]));
                     });
 
                     result.push({ pattern: pattern, words: words.join(',') });
