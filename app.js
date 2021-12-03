@@ -2,6 +2,8 @@ var app = new pro.Unit();
 
 app.unit('letter-game')
     .out(function () {
+        var me = this;
+
         pro.http.to('api/words')
             .on(200, function (response) {
                 response = JSON.parse(response.data);
