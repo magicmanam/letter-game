@@ -33,7 +33,7 @@ pro.load.on('words-component.html', function (wordsContainer) {
                         words.push(pattern.replace('*', letters[i]));
                     });
 
-                    result.push({ pattern: pattern, words: words.join(',') });
+                    result.push({ pattern: pattern, words: words.join(',').replace(',', ', ') });
                 });
 
                 viewModel.wordsList(result);
