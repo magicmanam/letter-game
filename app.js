@@ -13,36 +13,6 @@ app.unit('letter-game')
             .get();
     });
 
-pro.load.on('words-component.html', function (wordsContainer) {
-    app.unit('words-list')
-        .on('letter-game')
-        .out(function (letterGame) {
-            var me = this,
-                viewModel = pro.data({ wordsList: [] });
-
-            letterGame.on('words-loaded', function (data) {
-                var result = [];
-
-                const patterns = Object.keys(data);
-
-                patterns.forEach((pattern) => {
-                    let letters = data[pattern];
-                    let words = [];
-
-                    letters.forEach((letter, i) => {
-                        words.push(pattern.replace('*', letters[i]));
-                    });
-
-                    result.push({ pattern: pattern, words: words.join(',').replaceAll(',', ', ') });
-                });
-
-                viewModel.wordsList(result);
-            });
-
-            pro.mvvm.to(wordsContainer, viewModel);
-        });
-});
-
 app.unit('Toolbar')
     .on('letter-game')
     .out(function (letterGame) {
@@ -51,6 +21,36 @@ app.unit('Toolbar')
 
 pro.load.once('similar-words.html', function (view) {
     'use strict';
+
+    pro.load.on('words-component.html', function (wordsContainer) {
+        app.unit('words-list')
+            .on('letter-game')
+            .out(function (letterGame) {
+                var me = this,
+                    viewModel = pro.data({ wordsList: [] });
+
+                letterGame.on('words-loaded', function (data) {
+                    var result = [];
+
+                    const patterns = Object.keys(data);
+
+                    patterns.forEach((pattern) => {
+                        let letters = data[pattern];
+                        let words = [];
+
+                        letters.forEach((letter, i) => {
+                            words.push(pattern.replace('*', letters[i]));
+                        });
+
+                        result.push({ pattern: pattern, words: words.join(',').replaceAll(',', ', ') });
+                    });
+
+                    viewModel.wordsList(result);
+                });
+
+                pro.mvvm.to(wordsContainer, viewModel);
+            });
+    });
 
     pro.view.name('similar-words-view')(function () {
         return view.cloneNode(true);
