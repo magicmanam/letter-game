@@ -19,36 +19,6 @@ app.unit('Toolbar')
         letterGame.out('load-words');
     });
 
-pro.load.on('words-component.html', function (wordsContainer) {
-    app.unit('words-list')
-        .on('letter-game')
-        .out(function (letterGame) {
-            var me = this,
-                viewModel = pro.data({ wordsList: [] });
-
-            pro.mvvm.to(wordsContainer, viewModel);
-
-            letterGame.on('words-loaded', function (data) {
-                var result = [];
-
-                const patterns = Object.keys(data);
-
-                patterns.forEach((pattern) => {
-                    let letters = data[pattern];
-                    let words = [];
-
-                    letters.forEach((letter, i) => {
-                        words.push(pattern.replace('*', letters[i]));
-                    });
-
-                    result.push({ pattern: pattern, words: words.join(',').replaceAll(',', ', ') });
-                });
-
-                viewModel.wordsList(result);
-            });
-        });
-});
-
 pro.load.once('similar-words.html', function (view) {
     'use strict';
 
@@ -57,6 +27,36 @@ pro.load.once('similar-words.html', function (view) {
     })
     .on(function (model) {
         this.out('hidden');
+    });
+
+    pro.load.on('words-component.html', function (wordsContainer) {
+        app.unit('words-list')
+            .on('letter-game')
+            .out(function (letterGame) {
+                var me = this,
+                    viewModel = pro.data({ wordsList: [] });
+
+                pro.mvvm.to(wordsContainer, viewModel);
+
+                letterGame.on('words-loaded', function (data) {
+                    var result = [];
+
+                    const patterns = Object.keys(data);
+
+                    patterns.forEach((pattern) => {
+                        let letters = data[pattern];
+                        let words = [];
+
+                        letters.forEach((letter, i) => {
+                            words.push(pattern.replace('*', letters[i]));
+                        });
+
+                        result.push({ pattern: pattern, words: words.join(',').replaceAll(',', ', ') });
+                    });
+
+                    viewModel.wordsList(result);
+                });
+            });
     });
 });
 
