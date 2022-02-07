@@ -13,12 +13,6 @@ app.unit('letter-game')
             .get();
     });
 
-app.unit('Toolbar')
-    .on('letter-game')
-    .out(function (letterGame) {
-        letterGame.out('load-words');
-    });
-
 pro.load.once('similar-words.html', function (view) {
     'use strict';
 
@@ -48,10 +42,12 @@ pro.load.once('similar-words.html', function (view) {
                         let words = [];
 
                         letters.forEach((letter, i) => {
-                            words.push(pattern.replace('*', letters[i]));
+                            words.push(pattern.replace('*', letter));
                         });
 
-                        result.push({ pattern: pattern, words: words.join(',').replaceAll(',', ', ') });
+                        let patternWithWords = { pattern: pattern, words: words.join(',').replaceAll(',', ', '), wordsArray: words };
+                        result.push(patternWithWords);
+                        index.addPattern(patternWithWords);
                     });
 
                     viewModel.wordsList(result);
@@ -86,4 +82,46 @@ pro.load.on('footer.html', function (footerContainer) {
         });
 });
 
+var index = new WordsIndex();
+
 pro.tree.document();
+
+function WordsIndex() {
+    var index = { letters: {} };
+
+    this.addPattern = function (pattern) {
+        for (let i = 0; i < pattern.wordsArray.length; i++) {
+            let word = pattern.wordsArray[i];
+
+            let currentIndex = index;
+            for (let j = 0; j < word.length; j++) {
+                if (!currentIndex.letters[word[j]]) {
+                    currentIndex.letters[word[j]] = { letters: {}, patterns: [] };
+                }
+
+                currentIndex = currentIndex.letters[word[j]];
+            }
+
+            //assumption is that all patterns are unique, so do not need to check that this pattern was not added before
+            currentIndex.patterns.push(pattern);
+        }
+    };
+
+    this.getIndex = function (prefix) {
+        if (prefix) {
+            let currentIndex = index;
+            for (let i = 0; i < prefix.length; i++) {
+                currentIndex = currentIndex.letters[prefix[i]];
+
+                if (!currentIndex) {
+                    return { letters: {}, patterns: [] };
+                }
+            }
+
+            return currentIndex;
+        }
+        else {
+            return index;
+        }
+    }
+}
